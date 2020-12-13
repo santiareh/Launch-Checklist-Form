@@ -1,72 +1,74 @@
 // Write your JavaScript code here!
-
 window.addEventListener("load", function() {
+   const pilotStatus = document.getElementById("pilotStatus");
+   const coPilotStatus = document.getElementById("copilotStatus");
+   const faulyItems = document.getElementById("faultyItems");
+   const launchStatus = document.getElementById("launchStatus");
+   const fuelStatus = document.getElementById("fuelStatus");
    let form = document.querySelector("form");
+
    form.addEventListener("submit", function(event) {
+      event.preventDefault();
       let pilotName = document.querySelector("input[name=pilotName]");
       let copilotName = document.querySelector("input[name=copilotName]");
       let fuelLevel = document.querySelector("input[name=fuelLevel]");
       let cargoMass = document.querySelector("input[name=cargoMass]");
+      //Verify all fields are completed
       if (pilotName.value === "" || copilotName.value === "" || fuelLevel.value === "" || cargoMass.value === "") {
          alert("All fields are required!");
          event.preventDefault();
       };
-      const fuelLevelNumber = Number(fuelLevel);
-      const cargoMassNumber = Number(cargoMass);
+      const fuelLevelNumber = Number(fuelLevel.value);
+      const cargoMassNumber = Number(cargoMass.value);
       if (typeof pilotName.value !== 'string'){
          alert("Pilot value must be a string")
          event.preventDefault();
       } else if (typeof copilotName.value !== 'string'){
          alert("Co-Pilot value must be a string")
          event.preventDefault();
-      } else if (isNaN(fuelLevelNumber) === false) {
+      } else if (isNaN(fuelLevelNumber) === true) {
          alert("Fuel Level value must be a number")
          event.preventDefault();
-      } else if (isNaN(cargoMassNumber) === false) {
+      } else if (isNaN(cargoMassNumber) === true) {
          alert("Cargo Mass value must be a number")
          event.preventDefault();
-      }
-   });
-});
-
-window.addEventListener("load", function() {
-   let form = document.querySelector("form");
-   form.addEventListener("submit", function(event) {
-      const pilotStatus = document.getElementById("pilotStatus");
-      const coPilotStatus = document.getElementById("copilotStatus");
-      const faulyItems = document.getElementById("faultyItems");
-      let launchStatus = document.getElementById("launchStatus");
-      let fuelStatus = document.getElementById("fuelStatus");
-
+      } else {
+      faultyItems.style.visibility = "visible";
       pilotStatus.innerHTML = `Pilot ${pilotName.value} is Ready`;
       coPilotStatus.innerHTML = `Co-Pilot ${copilotName.value} is Ready`;
-
-      if(fuelLevelNumber < 1000) {
+      if(fuelLevelNumber < 10000 && cargoMassNumber < 10000) {
          launchStatus.innerHTML = `Shuttle Not Ready For Launch`;
          launchStatus.style.color = "red";
-         fuelStatus.innerHTML = `Not Enough Fuel`;
-         faulyItems.style.visibility = "visible";
+         cargoStatus.innerHTML = `Cargo Mass Low Enough`;
+         fuelStatus.innerHTML = `Fuel Level Too Low`;
+      } else if(fuelLevelNumber > 10000 && cargoMassNumber > 10000) {
+         launchStatus.innerHTML = `Shuttle Not Ready For Launch`;
+         launchStatus.style.color = "red";
+         cargoStatus.innerHTML = `Cargo Mass Too Heavy`;
+         fuelStatus.innerHTML = `Fuel Level High Enough`;
+      } else if(fuelLevelNumber < 10000 && cargoMassNumber > 10000) {
+         launchStatus.innerHTML = `Shuttle Not Ready For Launch`;
+         launchStatus.style.color = "red";
+         cargoStatus.innerHTML = `Cargo Mass Too Heavy`;
+         fuelStatus.innerHTML = `Fuel Level Too Low`;
       } else {
          launchStatus.innerHTML = `Shuttle Is Ready For Launch`;
          launchStatus.style.color = "green";
+         cargoStatus.innerHTML = `Cargo Mass Low Enough`;
+         fuelStatus.innerHTML = `Fuel Level High Enough`;
       };
-
-      if (cargoMassNumber > 10000) {
-         launchStatus.innerHTML = `Shuttle Not Ready For Launch`;
-         launchStatus.style.color = "red";
-         cargoStatus.innerHTML = `Too Much Mass`;
-         faultyItems.style.visibility = "visible";
-      };
+   };
    });
 });
 
 fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response) {
    response.json().then(function(json){
-      let data = json();
+      let random = Math.floor((Math.random() * 5) + 1);
+      let data = json[random];
       let missionTarget = document.getElementById("missionTarget");
       //This block of code shows how to format the HTML once you fetch some planetary JSON!
       missionTarget.innerHTML = `
-         <h2>Mission Destination</h2>;
+         <h2>Mission Destination</h2>
          <ol>
          <li>Name: ${data.name}</li>
          <li>Diameter: ${data.diameter}</li>
@@ -76,5 +78,5 @@ fetch("https://handlers.education.launchcode.org/static/planets.json").then(func
          </ol>
          <img src="${data.image}"></img>`
    });
-   console.log(response);
+   //console.log(response);
 });
