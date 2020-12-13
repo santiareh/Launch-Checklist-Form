@@ -20,6 +20,7 @@ window.addEventListener("load", function() {
       };
       const fuelLevelNumber = Number(fuelLevel.value);
       const cargoMassNumber = Number(cargoMass.value);
+      //Verify fields are correct types
       if (typeof pilotName.value !== 'string'){
          alert("Pilot value must be a string")
          event.preventDefault();
@@ -33,6 +34,7 @@ window.addEventListener("load", function() {
          alert("Cargo Mass value must be a number")
          event.preventDefault();
       } else {
+         //Update fields according to inputs
       faultyItems.style.visibility = "visible";
       pilotStatus.innerHTML = `Pilot ${pilotName.value} is Ready`;
       coPilotStatus.innerHTML = `Co-Pilot ${copilotName.value} is Ready`;
