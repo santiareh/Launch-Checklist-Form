@@ -65,7 +65,7 @@ window.addEventListener("load", function() {
 
 fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response) {
    response.json().then(function(json){
-      let random = Math.floor((Math.random() * 5) + 1);
+      let random = Math.floor(Math.random() * 6);
       let data = json[random];
       let missionTarget = document.getElementById("missionTarget");
       //This block of code shows how to format the HTML once you fetch some planetary JSON!
